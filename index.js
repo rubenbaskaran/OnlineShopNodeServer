@@ -42,13 +42,17 @@ app.get("/api/user/auth", auth, (req, res) => {
 
 app.post("/api/user/register", (req, res) => {
   const user = new User(req.body);
-  user.save((err, userData) => {
+  user.save((err, doc) => {
     if (err) {
-      return res.json({ success: false, err });
+      return res.status(500).json({
+        success: false,
+        error: err,
+      });
     }
 
     return res.status(200).json({
       success: true,
+      userData: doc,
     });
   });
 });
