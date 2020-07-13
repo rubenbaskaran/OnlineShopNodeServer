@@ -55,39 +55,39 @@ userSchema.pre("save", function (next) {
   }
 });
 
-userSchema.methods.comparePassword = function (plainPassword, cb) {
+userSchema.methods.comparePassword = function (plainPassword, callback) {
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
     if (err) {
-      return cb(err);
+      return callback(err);
     }
 
-    cb(null, isMatch);
+    callback(null, isMatch);
   });
 };
 
-userSchema.methods.generateToken = function (cb) {
+userSchema.methods.generateToken = function (callback) {
   var user = this;
   var token = jwt.sign(user._id.toHexString(), "secret");
 
   user.token = token;
   user.save(function (err, user) {
     if (err) {
-      return cb(err);
+      return callback(err);
     }
 
-    cb(null, user);
+    callback(null, user);
   });
 };
 
-userSchema.statics.findByToken = function (token, cb) {
+userSchema.statics.findByToken = function (token, callback) {
   var user = this;
 
   jwt.verify(token, "secret", function (err, decode) {
     user.findOne({ _id: decode, token: token }, function (err, user) {
       if (err) {
-        return cb(err);
+        return callback(err);
       }
-      cb(null, user);
+      callback(null, user);
     });
   });
 };

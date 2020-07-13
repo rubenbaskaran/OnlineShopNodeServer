@@ -82,6 +82,7 @@ app.post("/api/user/login", (req, res) => {
           return res.status(400).send(err);
         }
 
+        // Save received token as a cookie
         res.cookie("x_auth", user.token).status(200).json({
           loginSuccess: true,
         });
